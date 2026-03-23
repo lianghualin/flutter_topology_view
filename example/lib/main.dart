@@ -61,6 +61,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
 
   // ---- tracking ----
   Preset? _activePreset;
+  Preset _lastLoadedPreset = Preset.domain; // remembers mode for icon selection
   String? _lastTappedNodeId;
 
   // ---- counter helpers ----
@@ -84,6 +85,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
   void _loadDomainPreset() {
     setState(() {
       _activePreset = Preset.domain;
+      _lastLoadedPreset = Preset.domain;
       _lastTappedNodeId = null;
       _nodeCounter = 5;
 
@@ -159,6 +161,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
   void _loadSwitchPreset() {
     setState(() {
       _activePreset = Preset.switchLevel;
+      _lastLoadedPreset = Preset.switchLevel;
       _lastTappedNodeId = null;
       _nodeCounter = 7;
 
@@ -254,6 +257,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
   void _loadEmptyPreset() {
     setState(() {
       _activePreset = Preset.empty;
+      _lastLoadedPreset = Preset.empty;
       _lastTappedNodeId = null;
       _nodeCounter = 0;
 
@@ -282,25 +286,30 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
 
   void _addRandomNode() {
     _nodeCounter++;
-    final id = 'node-$_nodeCounter';
-    final newNode = TopoNode(
-      id: id,
-      label: 'Node $_nodeCounter',
-      iconAsset: 'assets/images/switch_float.svg',
-      errorIconAsset: 'assets/images/switch_float_err.svg',
-    );
+    final isDomain = _lastLoadedPreset == Preset.domain;
+    final id = isDomain ? 'net-$_nodeCounter' : 'node-$_nodeCounter';
+    final label = isDomain ? 'Network-$_nodeCounter' : 'Node $_nodeCounter';
+    final icon = isDomain
+        ? 'assets/images/network_cloud_normal.svg'
+        : 'assets/images/switch_float.svg';
+    final errIcon = isDomain
+        ? 'assets/images/network_cloud_abnormal.svg'
+        : 'assets/images/switch_float_err.svg';
 
     if (_nodes.isEmpty) {
       // Standalone root with no connection.
-      final rootNode = TopoNode(
-        id: id,
-        label: 'Node $_nodeCounter',
-        iconAsset: 'assets/images/switch_float.svg',
-        errorIconAsset: 'assets/images/switch_float_err.svg',
-        isRoot: true,
-      );
       setState(() {
-        _nodes = [..._nodes, rootNode];
+        _nodes = [
+          ..._nodes,
+          TopoNode(
+            id: id,
+            label: label,
+            iconAsset: icon,
+            errorIconAsset: errIcon,
+            isRoot: true,
+            group: isDomain ? 'Domain-New-$_nodeCounter' : null,
+          ),
+        ];
         _activePreset = null;
       });
       return;
@@ -308,11 +317,23 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
 
     // Connect to a random existing node.
     final target = _nodes[_rng.nextInt(_nodes.length)];
+    final newNode = TopoNode(
+      id: id,
+      label: label,
+      iconAsset: icon,
+      errorIconAsset: errIcon,
+      group: isDomain ? 'Domain-New-$_nodeCounter' : null,
+      hoverInfo: isDomain ? null : {'IP': '10.0.${_rng.nextInt(255)}.${_rng.nextInt(255)}'},
+    );
     setState(() {
       _nodes = [..._nodes, newNode];
       _connections = [
         ..._connections,
-        TopoConnection(fromId: target.id, toId: id),
+        TopoConnection(
+          fromId: target.id,
+          toId: id,
+          lineColor: isDomain ? const Color(0xFF5B8DEF) : null,
+        ),
       ];
       _activePreset = null;
     });
@@ -346,10 +367,15 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
   void _addRandomConnection() {
     final pair = _findUnconnectedPair();
     if (pair == null) return;
+    final isDomain = _lastLoadedPreset == Preset.domain;
     setState(() {
       _connections = [
         ..._connections,
-        TopoConnection(fromId: pair.$1, toId: pair.$2),
+        TopoConnection(
+          fromId: pair.$1,
+          toId: pair.$2,
+          lineColor: isDomain ? const Color(0xFF5B8DEF) : null,
+        ),
       ];
       _activePreset = null;
     });
