@@ -1,3 +1,14 @@
+## 1.0.1
+
+- Rename package from `topology_view` to `flutter_topology_view`
+- Fix node label/icon spacing — Column-based layout replaces fragile Stack positioning
+- Fix CanvasKit WASM crash — reduce canvas size and add RepaintBoundary per layer
+- Unified info panel with accordion expand (name always visible, hover info slides in)
+- Semi-transparent frosted background on labels for readability over connection lines
+- Fix connection highlight dance — use static curve instead of animated bezier
+- Remove highlight bend entirely — highlighted connections stay as straight lines
+- Clean up auto-generated files from git tracking
+
 ## 1.0.0
 
 - Initial release
