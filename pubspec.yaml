@@ -1,7 +1,14 @@
 name: topology_view
-description: "Unified topology visualization widget — supports multi-domain network topology and single-network switch topology with BFS hierarchical layout, animated connections, and interactive pan/zoom."
+description: "Unified topology visualization widget with BFS hierarchical layout, animated connections, and interactive pan/zoom."
 version: 1.0.0
-homepage:
+homepage: https://github.com/lianghualin/flutter_topology_view
+repository: https://github.com/lianghualin/flutter_topology_view
+issue_tracker: https://github.com/lianghualin/flutter_topology_view/issues
+topics:
+  - widget
+  - topology
+  - network
+  - visualization
 
 environment:
   sdk: ^3.4.4
