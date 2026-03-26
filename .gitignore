@@ -5,6 +5,12 @@
 build/
 pubspec.lock
 
+# Auto-generated example files
+example/.metadata
+example/web/favicon.png
+example/web/icons/
+example/web/manifest.json
+
 # IDE
 .idea/
 *.iml
