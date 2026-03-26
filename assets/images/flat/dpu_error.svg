@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- DPU rack body (vertical) -->
+  <path d="M22 8 L58 8 L58 72 L22 72 Z" fill="#FDDFDF" stroke="#E74C3C" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- LED indicator 1 -->
+  <path d="M28 16 C28 14.5 29 13.5 30 13.5 C31 13.5 32 14.5 32 16 C32 17.5 31 18.5 30 18.5 C29 18.5 28 17.5 28 16 Z" fill="#E74C3C" stroke="#E74C3C" stroke-width="0.5"/>
+  <!-- LED indicator 2 -->
+  <path d="M28 24 C28 22.5 29 21.5 30 21.5 C31 21.5 32 22.5 32 24 C32 25.5 31 26.5 30 26.5 C29 26.5 28 25.5 28 24 Z" fill="#E74C3C" stroke="#E74C3C" stroke-width="0.5"/>
+  <!-- LED indicator 3 -->
+  <path d="M28 32 C28 30.5 29 29.5 30 29.5 C31 29.5 32 30.5 32 32 C32 33.5 31 34.5 30 34.5 C29 34.5 28 33.5 28 32 Z" fill="#E74C3C" stroke="#E74C3C" stroke-width="0.5"/>
+  <!-- Divider line -->
+  <path d="M22 44 L58 44" fill="none" stroke="#E74C3C" stroke-width="1.5"/>
+  <!-- Port square 1 -->
+  <path d="M28 50 L38 50 L38 58 L28 58 Z" fill="#E74C3C" stroke="#E74C3C" stroke-width="1" opacity="0.3"/>
+  <!-- Port square 2 -->
+  <path d="M42 50 L52 50 L52 58 L42 58 Z" fill="#E74C3C" stroke="#E74C3C" stroke-width="1" opacity="0.3"/>
+</svg>

@@ -56,6 +56,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
   bool _enableHighlight = false;
   bool _showHoverInfo = false;
   bool _enableHoverAnimation = false;
+  bool _showAllInfo = false;
   bool _showFitViewButton = true;
   bool _isConfigMode = false;
 
@@ -93,37 +94,32 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
         const TopoNode(
           id: 'net-mgmt',
           label: 'Management',
-          iconAsset: 'assets/images/network_cloud_normal.svg',
-          errorIconAsset: 'assets/images/network_cloud_abnormal.svg',
+          deviceType: TopoDeviceType.network,
           isRoot: true,
           group: 'Domain-Core',
         ),
         const TopoNode(
           id: 'net-data',
           label: 'DataCenter',
-          iconAsset: 'assets/images/network_cloud_normal.svg',
-          errorIconAsset: 'assets/images/network_cloud_abnormal.svg',
+          deviceType: TopoDeviceType.network,
           group: 'Domain-Core',
         ),
         const TopoNode(
           id: 'net-east',
           label: 'East-Prod',
-          iconAsset: 'assets/images/network_cloud_normal.svg',
-          errorIconAsset: 'assets/images/network_cloud_abnormal.svg',
+          deviceType: TopoDeviceType.network,
           group: 'Domain-East',
         ),
         const TopoNode(
           id: 'net-east-dev',
           label: 'East-Dev',
-          iconAsset: 'assets/images/network_cloud_normal.svg',
-          errorIconAsset: 'assets/images/network_cloud_abnormal.svg',
+          deviceType: TopoDeviceType.network,
           group: 'Domain-East',
         ),
         const TopoNode(
           id: 'net-west',
           label: 'West-Prod',
-          iconAsset: 'assets/images/network_cloud_normal.svg',
-          errorIconAsset: 'assets/images/network_cloud_abnormal.svg',
+          deviceType: TopoDeviceType.network,
           group: 'Domain-West',
         ),
       ];
@@ -169,8 +165,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
         const TopoNode(
           id: 'sw-core-01',
           label: 'Core-SW-01',
-          iconAsset: 'assets/images/switch_float.svg',
-          errorIconAsset: 'assets/images/switch_float_err.svg',
+          deviceType: TopoDeviceType.switch_,
           isRoot: true,
           hoverInfo: {'IP': '10.0.0.1'},
           tooltip: 'Core switch',
@@ -178,46 +173,40 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
         const TopoNode(
           id: 'sw-agg-01',
           label: 'Agg-SW-01',
-          iconAsset: 'assets/images/switch_float.svg',
-          errorIconAsset: 'assets/images/switch_float_err.svg',
+          deviceType: TopoDeviceType.switch_,
           hoverInfo: {'IP': '10.0.1.1'},
           tooltip: 'Aggregation switch',
         ),
         const TopoNode(
           id: 'sw-agg-02',
           label: 'Agg-SW-02',
-          iconAsset: 'assets/images/switch_float.svg',
-          errorIconAsset: 'assets/images/switch_float_err.svg',
+          deviceType: TopoDeviceType.switch_,
           hoverInfo: {'IP': '10.0.1.2'},
           tooltip: 'Aggregation switch',
         ),
         const TopoNode(
           id: 'sw-access-01',
           label: 'Access-SW-01',
-          iconAsset: 'assets/images/switch_float.svg',
-          errorIconAsset: 'assets/images/switch_float_err.svg',
+          deviceType: TopoDeviceType.switch_,
           hoverInfo: {'IP': '10.0.2.1'},
         ),
         const TopoNode(
           id: 'sw-access-02',
           label: 'Access-SW-02',
-          iconAsset: 'assets/images/switch_float.svg',
-          errorIconAsset: 'assets/images/switch_float_err.svg',
+          deviceType: TopoDeviceType.switch_,
           isAbnormal: true,
           hoverInfo: {'IP': '10.0.2.2'},
         ),
         const TopoNode(
           id: 'sw-access-03',
           label: 'Access-SW-03',
-          iconAsset: 'assets/images/switch_float.svg',
-          errorIconAsset: 'assets/images/switch_float_err.svg',
+          deviceType: TopoDeviceType.switch_,
           hoverInfo: {'IP': '10.0.2.3'},
         ),
         const TopoNode(
           id: 'sw-external',
           label: 'External-SW',
-          iconAsset: 'assets/images/switch_float.svg',
-          errorIconAsset: 'assets/images/switch_float_err.svg',
+          deviceType: TopoDeviceType.switch_,
           isExternal: true,
           hoverInfo: {'IP': '10.1.0.1'},
         ),
@@ -289,12 +278,8 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
     final isDomain = _lastLoadedPreset == Preset.domain;
     final id = isDomain ? 'net-$_nodeCounter' : 'node-$_nodeCounter';
     final label = isDomain ? 'Network-$_nodeCounter' : 'Node $_nodeCounter';
-    final icon = isDomain
-        ? 'assets/images/network_cloud_normal.svg'
-        : 'assets/images/switch_float.svg';
-    final errIcon = isDomain
-        ? 'assets/images/network_cloud_abnormal.svg'
-        : 'assets/images/switch_float_err.svg';
+    final deviceType =
+        isDomain ? TopoDeviceType.network : TopoDeviceType.switch_;
 
     if (_nodes.isEmpty) {
       // Standalone root with no connection.
@@ -304,8 +289,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
           TopoNode(
             id: id,
             label: label,
-            iconAsset: icon,
-            errorIconAsset: errIcon,
+            deviceType: deviceType,
             isRoot: true,
             group: isDomain ? 'Domain-New-$_nodeCounter' : null,
           ),
@@ -320,8 +304,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
     final newNode = TopoNode(
       id: id,
       label: label,
-      iconAsset: icon,
-      errorIconAsset: errIcon,
+      deviceType: deviceType,
       group: isDomain ? 'Domain-New-$_nodeCounter' : null,
       hoverInfo: isDomain ? null : {'IP': '10.0.${_rng.nextInt(255)}.${_rng.nextInt(255)}'},
     );
@@ -388,8 +371,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
     final updated = TopoNode(
       id: old.id,
       label: old.label,
-      iconAsset: old.iconAsset,
-      errorIconAsset: old.errorIconAsset,
+      deviceType: old.deviceType,
       isRoot: old.isRoot,
       isAbnormal: !old.isAbnormal,
       isExternal: old.isExternal,
@@ -413,8 +395,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
     final updated = TopoNode(
       id: old.id,
       label: old.label,
-      iconAsset: old.iconAsset,
-      errorIconAsset: old.errorIconAsset,
+      deviceType: old.deviceType,
       isRoot: old.isRoot,
       isAbnormal: old.isAbnormal,
       isExternal: !old.isExternal,
@@ -542,6 +523,12 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
           _buildToggle('showHoverInfo', _showHoverInfo, (v) {
             setState(() {
               _showHoverInfo = v;
+              _activePreset = null;
+            });
+          }),
+          _buildToggle('showAllInfo', _showAllInfo, (v) {
+            setState(() {
+              _showAllInfo = v;
               _activePreset = null;
             });
           }),
@@ -680,6 +667,7 @@ class _PlaygroundPageState extends State<PlaygroundPage> {
       showFlowDots: _showFlowDots,
       enableHighlight: _enableHighlight,
       showHoverInfo: _showHoverInfo,
+      showAllInfo: _showAllInfo,
       enableHoverAnimation: _enableHoverAnimation,
       showFitViewButton: _showFitViewButton,
       isConfigMode: _isConfigMode,

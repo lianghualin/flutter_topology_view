@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- Shield shape -->
+  <path d="M40 8 L66 20 L66 42 C66 58 54 68 40 74 C26 68 14 58 14 42 L14 20 Z" fill="#FDDFDF" stroke="#E74C3C" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Horizontal cross line -->
+  <path d="M22 38 L58 38" fill="none" stroke="#E74C3C" stroke-width="2"/>
+  <!-- Vertical cross line -->
+  <path d="M40 18 L40 62" fill="none" stroke="#E74C3C" stroke-width="2"/>
+</svg>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:topology_view_icons/topology_view_icons.dart';
 
 import '../models/topo_node.dart';
 import '../utils/svg_cache.dart';
@@ -18,6 +19,7 @@ class TopoNodeLayer extends StatelessWidget {
   final void Function(String nodeId)? onNodeTap;
   final bool enableHoverAnimation;
   final bool showHoverInfo;
+  final bool showAllInfo;
   final bool isConfigMode;
 
   /// Whether nodes use cloud-style SVG clipping (for domain-level).
@@ -33,6 +35,7 @@ class TopoNodeLayer extends StatelessWidget {
     this.onNodeTap,
     this.enableHoverAnimation = true,
     this.showHoverInfo = false,
+    this.showAllInfo = false,
     this.isConfigMode = false,
     this.useCloudClip = false,
     this.onNodeHover,
@@ -51,6 +54,7 @@ class TopoNodeLayer extends StatelessWidget {
               onTap: onNodeTap,
               enableHoverAnimation: enableHoverAnimation,
               showHoverInfo: showHoverInfo,
+              showAllInfo: showAllInfo,
               isConfigMode: isConfigMode,
               useCloudClip: useCloudClip,
               onHover: onNodeHover,
@@ -70,6 +74,7 @@ class _NodeWidget extends StatefulWidget {
   final void Function(String nodeId)? onTap;
   final bool enableHoverAnimation;
   final bool showHoverInfo;
+  final bool showAllInfo;
   final bool isConfigMode;
   final bool useCloudClip;
   final void Function(String? nodeId)? onHover;
@@ -80,6 +85,7 @@ class _NodeWidget extends StatefulWidget {
     this.onTap,
     required this.enableHoverAnimation,
     required this.showHoverInfo,
+    required this.showAllInfo,
     required this.isConfigMode,
     required this.useCloudClip,
     this.onHover,
@@ -120,10 +126,9 @@ class _NodeWidgetState extends State<_NodeWidget>
       builder: (context, child) {
         final double hoverOffset =
             widget.enableHoverAnimation ? _controller.value * 2 : 0.0;
-        final double hoverHeightIncrease =
-            widget.enableHoverAnimation ? _controller.value * 5 : 0.0;
 
         final double size = _nodeSize;
+        final double outerWidth = size < 120 ? 120.0 : size;
 
         Widget inner = MouseRegion(
           onEnter: widget.enableHoverAnimation
@@ -145,26 +150,17 @@ class _NodeWidgetState extends State<_NodeWidget>
           child: GestureDetector(
             onTap: () => widget.onTap?.call(widget.node.id),
             child: SizedBox(
-              width: size,
-              height: size +
-                  (widget.enableHoverAnimation ? 10 : 6) +
-                  hoverHeightIncrease,
-              child: Stack(
-                alignment: Alignment.topCenter,
+              width: outerWidth,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Icon
                   _buildIcon(size),
-                  // Label below icon
-                  Positioned(
-                    top: size - (widget.useCloudClip ? 10 : 5),
-                    child: _buildLabel(size),
+                  // Name + hover info unified panel, pulled closer to icon.
+                  Transform.translate(
+                    offset: Offset(0, widget.useCloudClip ? -30 : -20),
+                    child: _buildInfoPanel(size),
                   ),
-                  // Hover info panel (below label)
-                  if (widget.showHoverInfo && _controller.value > 0)
-                    Positioned(
-                      top: size + 10,
-                      child: _buildHoverInfo(),
-                    ),
                 ],
               ),
             ),
@@ -177,7 +173,7 @@ class _NodeWidgetState extends State<_NodeWidget>
         }
 
         return Positioned(
-          left: widget.position.dx - size / 2,
+          left: widget.position.dx - outerWidth / 2,
           top: widget.position.dy - size / 2 - hoverOffset,
           child: inner,
         );
@@ -186,6 +182,22 @@ class _NodeWidgetState extends State<_NodeWidget>
   }
 
   Widget _buildIcon(double size) {
+    // Priority: deviceType (painted icon) > iconAsset (SVG) > fallback circle.
+    final deviceType = widget.node.deviceType;
+    if (deviceType != null) {
+      return SizedBox(
+        width: size,
+        height: size,
+        child: CustomPaint(
+          painter: TopoIconPainter(
+            deviceType: deviceType,
+            isError: _isAbnormal,
+            style: widget.node.iconStyle,
+          ),
+        ),
+      );
+    }
+
     final String? assetPath =
         _isAbnormal ? widget.node.errorIconAsset : widget.node.iconAsset;
 
@@ -247,54 +259,95 @@ class _NodeWidgetState extends State<_NodeWidget>
     );
   }
 
-  Widget _buildLabel(double size) {
+  /// Unified info panel: name always visible, hover info expands below on hover.
+  /// Transparent when idle, semi-transparent frosted white when hovered.
+  Widget _buildInfoPanel(double size) {
     final String label = widget.node.label;
+    final bool isExpanded = widget.showAllInfo || _controller.value > 0;
+    final double t = widget.showAllInfo ? 1.0 : _controller.value;
 
     double fontSize;
+    double panelWidth;
     if (widget.useCloudClip) {
-      // Cloud mode: scale font down for longer names.
       fontSize = label.length > 14 ? 9.0 : (label.length > 10 ? 10.0 : 12.0);
+      panelWidth = 140;
     } else {
-      fontSize = size * 0.12;
+      fontSize = 11.0;
+      panelWidth = 120;
     }
 
     final String text = _formatLabel(label);
-
-    return SizedBox(
-      width: widget.useCloudClip ? 140 : size,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: fontSize,
-          color: Colors.black,
-          fontWeight: widget.enableHoverAnimation && _controller.value > 0.5
-              ? FontWeight.bold
-              : FontWeight.normal,
-        ),
-        textAlign: TextAlign.center,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-
-  Widget _buildHoverInfo() {
     final hoverInfo = widget.node.hoverInfo;
-    if (hoverInfo == null || hoverInfo.isEmpty) return const SizedBox.shrink();
+    final bool hasHoverInfo =
+        widget.showHoverInfo && hoverInfo != null && hoverInfo.isNotEmpty;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final entry in hoverInfo.entries)
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      constraints: BoxConstraints(maxWidth: panelWidth),
+      padding: EdgeInsets.symmetric(
+        horizontal: 6,
+        vertical: isExpanded ? 6 : 2,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: isExpanded ? 0.75 : 0.45),
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: isExpanded
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : [],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Name — always visible.
           Text(
-            '${entry.key}: ${entry.value}',
+            text,
             style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.bold,
-              color: Colors.black.withValues(alpha: _controller.value),
+              fontSize: fontSize,
+              color: Colors.black,
+              fontWeight: t > 0.5 ? FontWeight.bold : FontWeight.normal,
             ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-      ],
+          // Hover info — expands below name on hover.
+          if (hasHoverInfo)
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              child: SizedBox(
+                height: isExpanded ? null : 0,
+                child: isExpanded
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            for (final entry in hoverInfo.entries)
+                              Text(
+                                '${entry.key}: ${entry.value}',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Colors.black87.withValues(alpha: t),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ),
+        ],
+      ),
     );
   }
 

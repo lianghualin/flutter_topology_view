@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- Circle -->
+  <path d="M40 10 C56.57 10 70 23.43 70 40 C70 56.57 56.57 70 40 70 C23.43 70 10 56.57 10 40 C10 23.43 23.43 10 40 10 Z" fill="#FDDFDF" stroke="#E74C3C" stroke-width="2.5"/>
+  <!-- Question mark glyph as path -->
+  <path d="M32 30 C32 24 36 20 40 20 C44 20 48 24 48 28 C48 32 45 34 42 35 L42 35 C41 35.5 40 36.5 40 38 L40 42" fill="none" stroke="#E74C3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Question mark dot -->
+  <path d="M40 50 C41.66 50 43 51.34 43 53 C43 54.66 41.66 56 40 56 C38.34 56 37 54.66 37 53 C37 51.34 38.34 50 40 50 Z" fill="#E74C3C" stroke="#E74C3C" stroke-width="0.5"/>
+</svg>

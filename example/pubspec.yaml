@@ -1,0 +1,21 @@
+name: topology_view_example
+description: Example app demonstrating the topology_view package.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.4.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  topology_view:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true

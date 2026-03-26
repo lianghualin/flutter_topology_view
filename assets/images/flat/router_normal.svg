@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- Outer circle as path -->
+  <path d="M40 10 C56.57 10 70 23.43 70 40 C70 56.57 56.57 70 40 70 C23.43 70 10 56.57 10 40 C10 23.43 23.43 10 40 10 Z" fill="#D6E4FF" stroke="#4B7BEC" stroke-width="2.5"/>
+  <!-- Center dot -->
+  <path d="M40 36 C42.21 36 44 37.79 44 40 C44 42.21 42.21 44 40 44 C37.79 44 36 42.21 36 40 C36 37.79 37.79 36 40 36 Z" fill="#4B7BEC" stroke="#4B7BEC" stroke-width="1"/>
+  <!-- North arrow -->
+  <path d="M40 32 L40 18 M36 22 L40 18 L44 22" fill="none" stroke="#4B7BEC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- South arrow -->
+  <path d="M40 48 L40 62 M36 58 L40 62 L44 58" fill="none" stroke="#4B7BEC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- East arrow -->
+  <path d="M48 40 L62 40 M58 36 L62 40 L58 44" fill="none" stroke="#4B7BEC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- West arrow -->
+  <path d="M32 40 L18 40 M22 36 L18 40 L22 44" fill="none" stroke="#4B7BEC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
