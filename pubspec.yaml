@@ -1,4 +1,4 @@
-name: topology_view
+name: flutter_topology_view
 description: "Unified topology visualization widget with BFS hierarchical layout, animated connections, and interactive pan/zoom."
 version: 1.0.0
 homepage: https://github.com/lianghualin/flutter_topology_view

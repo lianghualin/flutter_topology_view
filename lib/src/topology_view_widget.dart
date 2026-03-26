@@ -163,10 +163,10 @@ class TopologyViewState extends State<TopologyView> {
     final Set<String> paths = {};
     for (final node in widget.nodes) {
       if (node.iconAsset != null) {
-        paths.add('packages/topology_view/${node.iconAsset}');
+        paths.add('packages/flutter_topology_view/${node.iconAsset}');
       }
       if (node.errorIconAsset != null) {
-        paths.add('packages/topology_view/${node.errorIconAsset}');
+        paths.add('packages/flutter_topology_view/${node.errorIconAsset}');
       }
     }
     if (paths.isNotEmpty) {

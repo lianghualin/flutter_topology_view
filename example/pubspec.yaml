@@ -1,5 +1,5 @@
 name: topology_view_example
-description: Example app demonstrating the topology_view package.
+description: Example app demonstrating the flutter_topology_view package.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  topology_view:
+  flutter_topology_view:
     path: ../
 
 dev_dependencies:

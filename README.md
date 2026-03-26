@@ -1,4 +1,4 @@
-# topology_view
+# flutter_topology_view
 
 A unified Flutter topology visualization widget for rendering hierarchical network topologies with interactive pan/zoom, animated connections, and configurable node icons.
 
@@ -18,13 +18,13 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  topology_view: ^1.0.0
+  flutter_topology_view: ^1.0.0
 ```
 
 ## Usage
 
 ```dart
-import 'package:topology_view/topology_view.dart';
+import 'package:flutter_topology_view/topology_view.dart';
 
 TopologyView(
   nodes: [

@@ -204,7 +204,7 @@ class _SvgClipState extends State<SvgClip> {
 
     try {
       _hasError = false;
-      final fullPath = 'packages/topology_view/${widget.path}';
+      final fullPath = 'packages/flutter_topology_view/${widget.path}';
       final svg = await SvgCacheManager.loadSvg(fullPath);
       _cachedPath = SvgCacheManager.getPath(svg);
       return _cachedPath!;
@@ -247,7 +247,7 @@ class _SvgClipState extends State<SvgClip> {
               width: widget.width,
               height: widget.height,
               fit: widget.fit,
-              package: 'topology_view',
+              package: 'flutter_topology_view',
               placeholderBuilder: (_) => _buildLoading(),
             ),
           );

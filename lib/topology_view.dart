@@ -1,4 +1,4 @@
-library topology_view;
+library flutter_topology_view;
 
 export 'src/topology_view_widget.dart';
 export 'src/models/topo_node.dart';
