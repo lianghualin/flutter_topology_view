@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_topology_view/topology_view.dart';
+import 'package:flutter_topology_view/flutter_topology_view.dart';
 
 void main() {
   runApp(const TopologyViewExampleApp());

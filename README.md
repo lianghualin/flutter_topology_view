@@ -24,7 +24,7 @@ dependencies:
 ## Usage
 
 ```dart
-import 'package:flutter_topology_view/topology_view.dart';
+import 'package:flutter_topology_view/flutter_topology_view.dart';
 
 TopologyView(
   nodes: [
